@@ -2,7 +2,7 @@ const express = require("express");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
-router.post("/add", auth, async function (req, res) {
+router.post("/", auth, async function (req, res) {
   try {
     // const co2 = new Co2({
     //   site: req.body.siteId,
