@@ -15,11 +15,7 @@ async function main() {
   await mongoose.connect(uri);
 }
 
-main()
-  .catch((err) => console.log(err))
-  .then(() => {
-    console.log("MongoDB connected!");
-  });
+main().catch((err) => console.log(err));
 
 app.use(morgan("combined"));
 app.use(bodyParser.json());
