@@ -15,7 +15,7 @@ router.post("/", auth, async function (req, res) {
       sound: req.body.sound,
       co2: req.body.co2,
       voc: req.body.voc,
-    }).populate("sites");
+    }).populate("site");
     await sv.save();
     console.log(sv.toJSON());
     res.json({ message: "Records added!" });
