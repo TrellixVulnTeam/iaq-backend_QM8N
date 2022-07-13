@@ -32,7 +32,7 @@ router.get("/latest/:siteId", auth, async function (req, res) {
     const data = await SensorValue.find({
       site: req.params.siteId.toUpperCase(),
       createdAt: { $gt: from },
-    }).populate("site");
+    }).populate("site").sort({ createdAt: -1 });
     res.json(data);
   } catch (e) {
     console.log(e);
