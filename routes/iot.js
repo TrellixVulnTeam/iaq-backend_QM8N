@@ -15,7 +15,7 @@ router.post("/", auth, async function (req, res) {
       sound: req.body.sound,
       co2: req.body.co2,
       voc: req.body.voc,
-    }).populate("site");
+    });
     await sv.save();
     console.log(sv.toJSON());
     res.json({ message: "Records added!" });
@@ -32,7 +32,7 @@ router.get("/latest/:siteId", auth, async function (req, res) {
     const data = await SensorValue.find({
       site: req.params.siteId.toUpperCase(),
       createdAt: { $gt: from },
-    });
+    }).populate("site");
     res.json(data);
   } catch (e) {
     console.log(e);
