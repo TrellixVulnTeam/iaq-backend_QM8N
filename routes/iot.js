@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.post("/", auth, async function (req, res) {
   try {
-   
     const sv = new SensorValue({
       site: req.body.site_id,
       temperature: req.body.temperature,
@@ -15,7 +14,7 @@ router.post("/", auth, async function (req, res) {
       pressure: req.body.pressure,
       sound: req.body.sound,
       co2: req.body.co2,
-      voc: req.body.voc
+      voc: req.body.voc,
     });
     await sv.save();
     console.log(sv.toJSON());
@@ -26,6 +25,19 @@ router.post("/", auth, async function (req, res) {
   }
 });
 
-
+router.get("/latest/:siteId", auth, async function (req, res) {
+  try {
+    const from = Date.now() - 7200000;
+    console.log("From", from);
+    const data = await SensorValue.find({
+      site: req.params.siteId,
+      createdAt: { $gt: from },
+    });
+    res.json(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+});
 
 module.exports = router;
