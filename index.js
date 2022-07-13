@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 var morgan = require("morgan");
+var cors = require('cors');
+
 
 const { MongoClient } = require("mongodb");
 const uri =
@@ -26,6 +28,7 @@ async function main() {
 
 main().catch((err) => console.log(err));
 
+app.use(cors());
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 

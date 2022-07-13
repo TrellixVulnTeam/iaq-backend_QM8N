@@ -1,15 +1,24 @@
 const express = require("express");
 const auth = require("../middleware/auth");
+const { SensorValue } = require("../models/sensor-value");
 const router = express.Router();
 
 router.post("/", auth, async function (req, res) {
   try {
-    // const co2 = new Co2({
-    //   site: req.body.siteId,
-    //   value: req.body.value,
-    // });
-    // await co2.save();
-    console.log(req.body);
+   
+    const sv = new SensorValue({
+      site: req.body.site_id,
+      temperature: req.body.temperature,
+      humidity: req.body.humidity,
+      ambientLight: req.body.ambientLight,
+      uvIndex: req.body.uvIndex,
+      pressure: req.body.pressure,
+      sound: req.body.sound,
+      co2: req.body.co2,
+      voc: req.body.voc
+    });
+    await sv.save();
+    console.log(sv.toJSON());
     res.json({ message: "Records added!" });
   } catch (e) {
     console.log(e);
