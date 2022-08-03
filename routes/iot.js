@@ -15,6 +15,7 @@ router.post("/", auth, async function (req, res) {
       sound: req.body.sound,
       co2: req.body.co2,
       voc: req.body.voc,
+      createdAt: Date.now()
     });
     await sv.save();
     console.log(sv.toJSON());
@@ -27,12 +28,26 @@ router.post("/", auth, async function (req, res) {
 
 router.get("/latest/:siteId", auth, async function (req, res) {
   try {
-    const from = Date.now() - 7200000;
+    const from = Date.now() - 17200000;
     console.log("From", from);
     const data = await SensorValue.find({
       site: req.params.siteId.toUpperCase(),
       createdAt: { $gt: from },
-    }).populate("site").sort({ createdAt: -1 });
+    })
+      .populate("site")
+      .sort({ createdAt: -1 });
+    res.json(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+});
+
+router.get("/all/:siteId", auth, async function (req, res) {
+  try {
+    const data = await SensorValue.find({site: req.params.siteId})
+      .populate("site")
+      .sort({ createdAt: -1 }).limit(20);
     res.json(data);
   } catch (e) {
     console.log(e);
