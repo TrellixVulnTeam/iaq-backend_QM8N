@@ -1,4 +1,6 @@
 const express = require("express");
+const { TwitterApi } = require("twitter-api-v2");
+const checkSv = require("../helpers/check-sv");
 const auth = require("../middleware/auth");
 const { SensorValue } = require("../models/sensor-value");
 const router = express.Router();
@@ -15,28 +17,12 @@ router.post("/", auth, async function (req, res) {
       sound: req.body.sound,
       co2: req.body.co2,
       voc: req.body.voc,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     });
     await sv.save();
     console.log(sv.toJSON());
+    checkSv(sv.toJSON());
     res.json({ message: "Records added!" });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json(e);
-  }
-});
-
-router.get("/latest/:siteId", auth, async function (req, res) {
-  try {
-    const from = Date.now() - 17200000;
-    console.log("From", from);
-    const data = await SensorValue.find({
-      site: req.params.siteId.toUpperCase(),
-      createdAt: { $gt: from },
-    })
-      .populate("site")
-      .sort({ createdAt: -1 });
-    res.json(data);
   } catch (e) {
     console.log(e);
     res.status(500).json(e);
@@ -45,10 +31,34 @@ router.get("/latest/:siteId", auth, async function (req, res) {
 
 router.get("/all/:siteId", auth, async function (req, res) {
   try {
-    const data = await SensorValue.find({site: req.params.siteId})
+    const data = await SensorValue.find({ site: req.params.siteId })
       .populate("site")
-      .sort({ createdAt: -1 }).limit(20);
+      .sort({ createdAt: 1 });
     res.json(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+});
+
+router.get("/tweet", auth, async function (req, res) {
+  try {
+    const client = new TwitterApi({
+      appKey: "y883MRupf0GMMSHAOmfyRZyQd",
+      appSecret: "R22QzbdM2Em4EtNYarEAx2pkMLEmw9HNsDL8RgewXlpIwYSqw5",
+      accessToken: "1555701998351429632-ABv59RICIUM7HCyy7xNieL52PUWHXd",
+      accessSecret: "qW9TRttqVo6bCp8KnYSARxq2v74hvahriJIRdhw0Murp6",
+    });
+
+    client.v1
+      .tweet("This tweet was written by a bot")
+      .then((val) => {
+        res.json({ message: "Tweet successfull!" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ message: "Cannot tweet!" });
+      });
   } catch (e) {
     console.log(e);
     res.status(500).json(e);

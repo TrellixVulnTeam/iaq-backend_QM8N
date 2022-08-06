@@ -14,6 +14,12 @@ const siteSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isCo2Check: {
+    type: Boolean,
+  },
+  isVocCheck: {
+    type: Boolean,
+  },
 });
 
 const Site = mongoose.model("Site", siteSchema);
