@@ -12,6 +12,8 @@ module.exports = async function checkSv(sv) {
       accessSecret: "qW9TRttqVo6bCp8KnYSARxq2v74hvahriJIRdhw0Murp6",
     });
     const rslt = await Site.find({ _id: sv.site });
+    rslt[0].updatedAt = Date.now();
+    
     // console.log("Res", rslt);
     if (sv.co2 > constants.co2Threshold) {
       if (rslt[0].isCo2Check) {
@@ -30,7 +32,7 @@ module.exports = async function checkSv(sv) {
           });
 
         rslt[0].isCo2Check = false;
-        await rslt[0].save();
+        // await rslt[0].save();
       }
     }
 
@@ -51,7 +53,7 @@ module.exports = async function checkSv(sv) {
           });
 
         rslt[0].isCo2Check = true;
-        await rslt[0].save();
+        // await rslt[0].save();
       }
     }
 
@@ -72,7 +74,7 @@ module.exports = async function checkSv(sv) {
             });
   
           rslt[0].isVocCheck = false;
-          await rslt[0].save();
+        //   await rslt[0].save();
         }
       }
   
@@ -93,9 +95,11 @@ module.exports = async function checkSv(sv) {
             });
   
           rslt[0].isVocCheck = true;
-          await rslt[0].save();
+        //   await rslt[0].save();
         }
       }
+
+      await rslt[0].save();
   
   } catch (e) {
     console.log(e);

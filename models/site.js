@@ -20,6 +20,10 @@ const siteSchema = new mongoose.Schema({
   isVocCheck: {
     type: Boolean,
   },
+  updatedAt: {
+    type: Number,
+    default: Date.now(),
+  },
 });
 
 const Site = mongoose.model("Site", siteSchema);
