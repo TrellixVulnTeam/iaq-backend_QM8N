@@ -4,12 +4,13 @@ const checkSv = require("../helpers/check-sv");
 const timeConverter = require("../helpers/time-converter");
 const auth = require("../middleware/auth");
 const { SensorValue } = require("../models/sensor-value");
+const { constants } = require("../utils/constants");
 const router = express.Router();
 
 router.post("/", auth, async function (req, res) {
   try {
     const sv = new SensorValue({
-      site: req.body.site_id,
+      site: constants.currentSite,
       temperature: req.body.temperature,
       humidity: req.body.humidity,
       ambientLight: req.body.ambientLight,
