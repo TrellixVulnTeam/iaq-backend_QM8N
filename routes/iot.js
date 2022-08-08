@@ -44,7 +44,7 @@ router.get("/all/:siteId", auth, async function (req, res) {
 
 router.get("/all-alt/:siteId", auth, async function (req, res) {
   try {
-    request.setTimeout(0);
+    req.setTimeout(0);
     const data = await SensorValue.find({ site: req.params.siteId })
       .populate("site")
       .sort({ createdAt: 1 });
