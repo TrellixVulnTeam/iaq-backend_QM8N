@@ -1,6 +1,7 @@
 const express = require("express");
 const { TwitterApi } = require("twitter-api-v2");
 const checkSv = require("../helpers/check-sv");
+const timeConverter = require("../helpers/time-converter");
 const auth = require("../middleware/auth");
 const { SensorValue } = require("../models/sensor-value");
 const router = express.Router();
@@ -35,6 +36,75 @@ router.get("/all/:siteId", auth, async function (req, res) {
       .populate("site")
       .sort({ createdAt: 1 });
     res.json(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+});
+
+router.get("/all-alt/:siteId", auth, async function (req, res) {
+  try {
+    request.setTimeout(0);
+    const data = await SensorValue.find({ site: req.params.siteId })
+      .populate("site")
+      .sort({ createdAt: 1 });
+
+    let co2DataSeries = [];
+
+    let tempDataSeries = [];
+
+    let humidityDataSeries = [];
+
+    let alDataSeries = [];
+
+    let vocDataSeries = [];
+
+    let uvDataSeries = [];
+
+    let pressureDataSeries = [];
+
+    let soundDataSeries = [];
+
+    for (let j = 1; j < data.length; j++) {
+      // if(j%2===0)
+      co2DataSeries.push([timeConverter(data[j].createdAt), data[j].co2]);
+
+      tempDataSeries.push([
+        timeConverter(data[j].createdAt),
+        data[j].temperature,
+      ]);
+
+      humidityDataSeries.push([
+        timeConverter(data[j].createdAt),
+        data[j].humidity,
+      ]);
+
+      alDataSeries.push([
+        timeConverter(data[j].createdAt),
+        data[j].ambientLight,
+      ]);
+
+      vocDataSeries.push([timeConverter(data[j].createdAt), data[j].voc]);
+
+      uvDataSeries.push([timeConverter(data[j].createdAt), data[j].uvIndex]);
+      pressureDataSeries.push([
+        timeConverter(data[j].createdAt),
+        data[j].pressure,
+      ]);
+
+      soundDataSeries.push([timeConverter(data[j].createdAt), data[j].sound]);
+    }
+
+    res.json({
+      co2DataSeries: co2DataSeries,
+      tempDataSeries: tempDataSeries,
+      humidityDataSeries: humidityDataSeries,
+      alDataSeries: alDataSeries,
+      vocDataSeries: vocDataSeries,
+      uvDataSeries: uvDataSeries,
+      pressureDataSeries: pressureDataSeries,
+      soundDataSeries: soundDataSeries,
+    });
   } catch (e) {
     console.log(e);
     res.status(500).json(e);
