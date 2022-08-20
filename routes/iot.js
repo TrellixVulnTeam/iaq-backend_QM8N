@@ -136,14 +136,14 @@ router.get("/tweet", auth, async function (req, res) {
   }
 });
 
-// router.post("/delete-0", auth, async function (req, res) {
-//   try {
-//     await SensorValue.deleteMany({ co2: 0 });
-//     res.json({ message: "Deleted!" });
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json(e);
-//   }
-// });
+router.post("/delete-0", auth, async function (req, res) {
+  try {
+    await SensorValue.deleteMany({ co2: 0 });
+    res.json({ message: "Deleted!" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+});
 
 module.exports = router;

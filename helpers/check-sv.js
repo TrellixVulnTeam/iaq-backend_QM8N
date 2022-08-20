@@ -36,7 +36,7 @@ module.exports = async function checkSv(sv) {
       }
     }
 
-    if (sv.co2 <= constants.co2Threshold) {
+    if (sv.co2 <= constants.co2Threshold && sv.co2 != 0) {
       if (!rslt[0].isCo2Check) {
         client.v1
           .tweet(
