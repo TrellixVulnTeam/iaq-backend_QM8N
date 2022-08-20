@@ -21,6 +21,9 @@ router.post("/", auth, async function (req, res) {
       voc: req.body.voc,
       createdAt: Date.now(),
     });
+    if (sv.co2 == 0) {
+      return res.json({ message: "Zero value!" });
+    }
     await sv.save();
     console.log(sv.toJSON());
     checkSv(sv.toJSON());
