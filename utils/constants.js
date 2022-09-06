@@ -1,5 +1,5 @@
 exports.constants = Object.freeze({
-  co2Threshold: 450,
+  co2Threshold: 1000,
   vocThreshold: 500,
-  currentSite: "SIT001",
+  currentSite: "SIT002",
 });
