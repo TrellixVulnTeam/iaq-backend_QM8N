@@ -38,7 +38,9 @@ router.get("/all/:siteId", auth, async function (req, res) {
   try {
     const data = await SensorValue.find({ site: req.params.siteId })
       .populate("site")
-      .sort({ createdAt: 1 });
+      .sort({ createdAt: -1 })
+      .limit(200);
+    data.sort((a, b) => a.createdAt - b.createdAt); 
     res.json(data);
   } catch (e) {
     console.log(e);
